@@ -1,15 +1,7 @@
 <template>
   <div class="auth-page">
     <!-- Header -->
-    <header class="header">
-      <div class="header__left">
-        <img class="logo" :src="logoSrc" alt="DAON 로고" />
-      </div>
-      <div class="header__right">
-        <button class="btn btn--outline" @click="goHome">홈으로</button>
-      </div>
-    </header>
-
+    <TheHeader />
     <!-- Auth Card -->
     <main class="auth container">
       <section class="auth__card" role="dialog" aria-labelledby="authTitle">
@@ -19,7 +11,7 @@
           <p class="auth__sub">ELO로 더 똑똑한 1:1 청소 매칭</p>
         </div>
 
-        <!-- tabs -->
+        <!-- 탭 -->
         <div class="auth__tabs" role="tablist" aria-label="로그인 방식">
           <button
               role="tab"
@@ -35,7 +27,7 @@
           >휴대폰</button>
         </div>
 
-        <!-- form -->
+        <!-- 폼 -->
         <form class="auth__form" @submit.prevent="onSubmit">
           <div v-if="mode==='email'" class="field">
             <label for="email">이메일</label>
@@ -99,17 +91,14 @@
           </button>
         </form>
 
-        <!-- Divider -->
         <div class="divider"><span>또는</span></div>
 
-        <!-- Social -->
         <div class="social">
           <button class="social__btn social--kakao" @click="social('kakao')" aria-label="카카오로 로그인">카카오로 로그인</button>
           <button class="social__btn social--naver" @click="social('naver')" aria-label="네이버로 로그인">네이버로 로그인</button>
           <button class="social__btn social--google" @click="social('google')" aria-label="구글로 로그인">Google</button>
         </div>
 
-        <!-- Signup -->
         <p class="signup">
           계정이 없으신가요?
           <button class="link" type="button" @click="goSignup">회원가입</button>
@@ -117,15 +106,15 @@
       </section>
     </main>
 
-    <footer class="footer">© 2025 DAON — All rights reserved.</footer>
+    <TheFooter />
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue'
+import TheHeader from '@/components/layout/TheHeader.vue'
+import TheFooter from '@/components/layout/TheFooter.vue'
 import '../assets/LoginPage.css'
-
-const logoSrc = '/images/logo.png'
 
 type Mode = 'email' | 'phone'
 const mode = ref<Mode>('email')
@@ -158,7 +147,6 @@ function validatePassword () {
 }
 
 async function onSubmit () {
-  // 간단 검증
   const ok =
       (mode.value === 'email' ? validateEmail() : validatePhone()) &&
       validatePassword()
@@ -166,11 +154,8 @@ async function onSubmit () {
 
   try {
     loading.value = true
-    // TODO: 실제 API 연동
-    // await api.post('/auth/login', { email/phone, password, remember })
     await new Promise(r => setTimeout(r, 600))
     alert('로그인 성공! (데모)')
-    // 라우팅 예시: this.$router.push('/')
   } catch (e) {
     alert('로그인에 실패했어요. 다시 시도해주세요.')
   } finally {
@@ -179,7 +164,6 @@ async function onSubmit () {
 }
 
 function social (provider: 'kakao' | 'naver' | 'google') {
-  // 실서비스: OAuth 시작 URL로 이동
   alert(`[데모] ${provider} 로그인 시작`)
 }
 
