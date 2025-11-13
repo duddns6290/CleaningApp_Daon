@@ -1,0 +1,85 @@
+:root{
+    /* 홈과 동일 토큰 사용(없으면 fallback) */
+    --brand: #2563eb; --brand-600:#2563eb; --brand-700:#1d4ed8;
+    --ink:#0f172a; --muted:#6b7280; --bg:#f8fafc;
+}
+
+/* 공통 버튼 */
+.btn{ height:36px; padding:0 14px; border-radius:10px; font-weight:600; cursor:pointer; transition:.2s ease; }
+.btn--outline{ color:var(--brand-600); border:1px solid var(--brand-600); background:transparent; }
+.btn--outline:hover{ background:var(--brand-600); color:#fff; }
+.btn--primary{ background:var(--brand-600); color:#fff; border:1px solid var(--brand-600); }
+.btn--primary:hover{ background:var(--brand-700); }
+
+/* 페이지 레이아웃 */
+.auth-page{ min-width:100svw; min-height:100svh; background:var(--bg); color:var(--ink); display:flex; flex-direction:column; }
+.header{ height:64px; display:flex; align-items:center; justify-content:space-between; padding:0 20px; background:#fff; border-bottom:1px solid #eef2f7; position:sticky; top:0; z-index:10; }
+.logo{ height:50px; object-fit:contain; }
+
+.container{ inline-size:100%; max-inline-size:min(960px, 94vw); margin-inline:auto; padding-inline: clamp(12px, 2vw, 24px); }
+
+/* 메인 영역 */
+.auth{gap:24px; align-items:start; margin-block: 36px 24px; }
+@media (max-width: 960px){ .auth{ grid-template-columns: 1fr; } }
+
+/* 카드 */
+.auth__card{
+    max-width: 650px;
+    min-width: 330px;
+    width: 60svw;
+    background:#fff; border:1px solid #eef2f7; border-radius:16px; padding:22px 20px;
+    box-shadow:0 8px 20px rgba(2,6,23,.05);
+    margin: 0 auto;
+}
+.auth__brand{ text-align:center; margin-block-end:12px; }
+.auth__badge{ display:inline-block; font-weight:800; color:#fff; background:var(--brand-600); padding:6px 10px; border-radius:999px; font-size:12px; letter-spacing:.04em; }
+.auth__brand h1{ margin:.6rem 0 .25rem; font-size:24px; font-weight:800; }
+.auth__sub{ color:#6b7280; font-size:14px; }
+
+/* 탭 */
+.auth__tabs{ display:flex; gap:8px; background:#f9fafb; border:1px solid #e5e7eb; padding:6px; border-radius:12px; margin:14px 0 6px; }
+.auth__tab{ flex:1; padding:8px 10px; border-radius:8px; font-weight:700; color:#334155; background:transparent; border:1px solid transparent; cursor:pointer; }
+.auth__tab.is-active{ background:rgba(37,99,235,.10); color:var(--brand-700); border-color:rgba(37,99,235,.25); }
+
+/* 폼 */
+.auth__form{ margin-top:10px; }
+.field{ display:grid; gap:6px; margin:12px 0; }
+.field label{ font-weight:700; font-size:14px; }
+.field input{
+    height:42px; padding:0 12px; border-radius:10px; border:1px solid #e5e7eb; outline:none; background:#fff; font-size:15px;
+}
+.field input:focus{ border-color: var(--brand-600); box-shadow:0 0 0 3px rgba(37,99,235,.12); }
+.field .is-invalid{ border-color:#ef4444; }
+.error{ color:#ef4444; font-size:12px; }
+
+.password{ position:relative; display:flex; align-items:center; }
+.password input{ flex:1; padding-right:68px; }
+.pw-toggle{
+    position:absolute; right:8px; height:28px; padding:0 10px; border-radius:8px;
+    background:#f3f4f6; border:1px solid #e5e7eb; cursor:pointer; font-size:12px; color:#374151;
+}
+.row{ display:flex; align-items:center; gap:10px; }
+.row--between{ justify-content:space-between; }
+
+.check input{ margin-right:6px; }
+.link{ background:transparent; border:0; color:var(--brand-700); cursor:pointer; font-weight:700; }
+.link:hover{ text-decoration:underline; }
+
+.auth__submit{ width:100%; margin-top:6px; height:44px; border-radius:12px; }
+
+/* Divider */
+.divider{ display:flex; align-items:center; gap:10px; color:#94a3b8; font-size:12px; margin:16px 0; }
+.divider::before, .divider::after{ content:''; flex:1; height:1px; background:#e5e7eb; }
+
+/* Social */
+.social{ display:grid; gap:10px; }
+.social__btn{ height:42px; border-radius:12px; border:1px solid #e5e7eb; background:#fff; font-weight:700; cursor:pointer; }
+.social--kakao{ background:#FEE500; border-color:#FEE500; }
+.social--naver{ background:#03C75A; color:#fff; border-color:#03C75A; }
+.social--google{ background:#fff; }
+
+/* Side USP */
+@media (max-width: 960px){ .usp{ display:none; } }
+
+/* Footer */
+.footer{ border-top:1px solid #eef2f7; text-align:center; padding:20px; color:#6b7280; background:#fff; }
