@@ -1,9 +1,7 @@
 package com.org.cleaningapp_daon.user.service;
 
-import com.org.cleaningapp_daon.user.entity.User;
 import com.org.cleaningapp_daon.user.entity.dto.OauthProvider;
 import com.org.cleaningapp_daon.user.entity.dto.SignupType;
-import com.org.cleaningapp_daon.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
