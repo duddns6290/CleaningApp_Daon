@@ -5,6 +5,7 @@ create table users (
     email varchar(255) unique,
     name varchar(30) not null,
     address varchar(100),
+    password varchar(255),
     phone varchar(30) unique,
     created_at timestamp default current_timestamp
     );
