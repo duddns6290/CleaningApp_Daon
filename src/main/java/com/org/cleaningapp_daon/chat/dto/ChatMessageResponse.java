@@ -7,7 +7,7 @@ import java.time.Instant;
 public record ChatMessageResponse(
         Long id,
         Long roomId,
-        Long senderId,
+        String senderId,
         ChatMessage.SenderRole senderRole,
         String message,
         boolean readYn,

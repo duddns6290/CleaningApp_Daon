@@ -1,14 +1,26 @@
 package com.org.cleaningapp_daon.chat.service;
 
+import com.org.cleaningapp_daon.security.AuthPrincipal;
 import org.springframework.stereotype.Component;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 @Component
 public class AuthFacade {
 
-    //TODO: JWT 연동 시 SecurityContext에서 userId/role 꺼내도록 수정
-    public Long currentUserId() {
-        // 임시 테스트값
-        return 1L;
+    private AuthPrincipal currentPrincipal() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        if (authentication == null || !(authentication.getPrincipal() instanceof AuthPrincipal ap)) {
+            throw new IllegalStateException("Unauthenticated user");
+        }
+
+        return ap;
+    }
+
+    public String currentUserId() {
+        AuthPrincipal ap = currentPrincipal();
+        return ap.userId(); // String
     }
 
     public String currentRole() {

@@ -19,10 +19,10 @@ public class ChatRoom {
     private Long requestId;
 
     @Column(nullable = false)
-    private Long customerId;
+    private String customerId;
 
     @Column(nullable = false)
-    private Long providerId;
+    private String providerId;
 
     private String lastMessage;
     private Instant lastMessageAt;
@@ -35,7 +35,7 @@ public class ChatRoom {
         this.createdAt = Instant.now();
     }
 
-    public boolean isParticipant(Long userId) {
-        return customerId.equals(userId) || providerId.equals(userId);
+    public boolean isParticipant(String userId) {
+        return userId != null && (userId.equals(customerId) || userId.equals(providerId));
     }
 }

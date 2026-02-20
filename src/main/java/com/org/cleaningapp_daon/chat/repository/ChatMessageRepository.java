@@ -9,5 +9,5 @@ public interface ChatMessageRepository extends JpaRepository<ChatMessage, Long> 
 
     Page<ChatMessage> findByRoomIdOrderByCreatedAtDesc(Long roomId, Pageable pageable);
 
-    long countByRoomIdAndReadYnFalseAndSenderIdNot(Long roomId, Long myId);
+    long countByRoomIdAndReadYnFalseAndSenderIdNot(Long roomId, String senderId);
 }

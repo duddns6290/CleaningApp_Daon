@@ -24,7 +24,7 @@ public class ChatService {
     private final AuthFacade auth;
 
     @Transactional
-    public ChatRoomResponse createRoomIfAbsent(Long requestId, Long customerId, Long providerId) {
+    public ChatRoomResponse createRoomIfAbsent(Long requestId, String customerId, String providerId) {
         ChatRoom room = chatRoomRepository.findByRequestId(requestId)
                 .orElseGet(() -> chatRoomRepository.save(ChatRoom.builder()
                         .requestId(requestId)
@@ -45,7 +45,7 @@ public class ChatService {
     }
 
     public List<ChatRoom> myRooms() {
-        Long me = auth.currentUserId();
+        String me = auth.currentUserId(); //   String
         return chatRoomRepository.findByCustomerIdOrProviderIdOrderByLastMessageAtDesc(me, me);
     }
 
@@ -63,12 +63,12 @@ public class ChatService {
         ChatRoom room = mustGetRoom(req.roomId());
         mustBeParticipant(room);
 
-        Long me = auth.currentUserId();
+        String me = auth.currentUserId(); //   String
         ChatMessage.SenderRole role = ChatMessage.SenderRole.valueOf(auth.currentRole());
 
         ChatMessage saved = chatMessageRepository.save(ChatMessage.builder()
                 .roomId(room.getId())
-                .senderId(me)
+                .senderId(me) //   String
                 .senderRole(role)
                 .message(req.message())
                 .readYn(false)
@@ -86,20 +86,24 @@ public class ChatService {
         ChatRoom room = mustGetRoom(roomId);
         mustBeParticipant(room);
 
-        Long me = auth.currentUserId();
+        String me = auth.currentUserId(); //   String
         var page = chatMessageRepository.findByRoomIdOrderByCreatedAtDesc(roomId, PageRequest.of(0, 200));
+
         page.forEach(m -> {
             if (!m.getSenderId().equals(me) && !m.isReadYn()) {
                 m.setReadYn(true);
             }
         });
+
         chatMessageRepository.saveAll(page);
     }
 
     public long unreadCount(Long roomId) {
         ChatRoom room = mustGetRoom(roomId);
         mustBeParticipant(room);
-        return chatMessageRepository.countByRoomIdAndReadYnFalseAndSenderIdNot(roomId, auth.currentUserId());
+
+        String me = auth.currentUserId(); //   String
+        return chatMessageRepository.countByRoomIdAndReadYnFalseAndSenderIdNot(roomId, me);
     }
 
     private ChatRoom mustGetRoom(Long roomId) {
@@ -108,9 +112,35 @@ public class ChatService {
     }
 
     private void mustBeParticipant(ChatRoom room) {
-        Long me = auth.currentUserId();
+        String me = auth.currentUserId(); //   String
         if (!room.isParticipant(me)) {
             throw new SecurityException("Not a participant of room: " + room.getId());
         }
     }
+
+    @Transactional
+    public ChatMessageResponse sendMessage(ChatSendRequest req, String userId, String roleStr) {
+        ChatRoom room = mustGetRoom(req.roomId());
+        // 참여자 검증
+        if (!room.isParticipant(userId)) {
+            throw new SecurityException("Not a participant of room: " + room.getId());
+        }
+
+        ChatMessage.SenderRole role = ChatMessage.SenderRole.valueOf(roleStr);
+
+        ChatMessage saved = chatMessageRepository.save(ChatMessage.builder()
+                .roomId(room.getId())
+                .senderId(userId)
+                .senderRole(role)
+                .message(req.message())
+                .readYn(false)
+                .build());
+
+        room.setLastMessage(req.message());
+        room.setLastMessageAt(Instant.now());
+        chatRoomRepository.save(room);
+
+        return ChatMessageResponse.from(saved);
+    }
+
 }

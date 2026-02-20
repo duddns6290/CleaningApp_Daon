@@ -20,7 +20,7 @@ public class ChatMessage {
     private Long roomId;
 
     @Column(nullable = false)
-    private Long senderId;
+    private String senderId;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 20)

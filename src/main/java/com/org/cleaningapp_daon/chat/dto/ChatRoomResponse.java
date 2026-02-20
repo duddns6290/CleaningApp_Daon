@@ -5,8 +5,8 @@ import java.time.Instant;
 public record ChatRoomResponse(
         Long roomId,
         Long requestId,
-        Long customerId,
-        Long providerId,
+        String customerId,
+        String providerId,
         String lastMessage,
         Instant lastMessageAt
 ) {}
