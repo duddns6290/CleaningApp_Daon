@@ -3,6 +3,7 @@ package com.org.cleaningapp_daon.user.service;
 import com.org.cleaningapp_daon.user.entity.User;
 import com.org.cleaningapp_daon.user.entity.dto.OauthProvider;
 import com.org.cleaningapp_daon.user.entity.dto.SignupType;
+import com.org.cleaningapp_daon.user.entity.dto.UserRole;
 import com.org.cleaningapp_daon.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
@@ -67,6 +68,7 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
                     .userId(email)
                     .email(email)
                     .name(name != null ? name : "UNKNOWN")
+                    .role(UserRole.CUSTOMER) // OAuth 가입 시 당분간 CUSTOMER 하드코딩
                     .signupType(SignupType.OAUTH)
                     .oauthProvider(provider)
                     .createdAt(LocalDateTime.now())

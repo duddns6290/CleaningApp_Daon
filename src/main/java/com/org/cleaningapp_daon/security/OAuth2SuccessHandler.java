@@ -42,9 +42,10 @@ public class OAuth2SuccessHandler implements org.springframework.security.web.au
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new IllegalStateException("User not found after OAuth login"));
 
-        // JWT 발급
-        String accessToken = jwtService.createAccessToken(user.getUserId(), "CUSTOMER");
-        String refreshToken = jwtService.createRefreshToken(user.getUserId(), "CUSTOMER");
+        // JWT 발급 (role은 DB users.role 사용)
+        String roleStr = user.getRole() != null ? user.getRole().name() : "CUSTOMER";
+        String accessToken = jwtService.createAccessToken(user.getUserId(), roleStr);
+        String refreshToken = jwtService.createRefreshToken(user.getUserId(), roleStr);
 
         // refresh는 HttpOnly 쿠키
         Cookie cookie = new Cookie("refreshToken", refreshToken);
