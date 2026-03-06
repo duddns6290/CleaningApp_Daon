@@ -40,3 +40,10 @@ npm run dev
 ```sh
 npm run build
 ```
+
+## 채팅 / 화상통화
+
+- **채팅**: `/chat` — 방 목록, `/chat/:roomId` — 실시간 메시지 (STOMP `/topic/chat/{roomId}`).
+- **화상통화**: 채팅방에서 "화상통화 걸기" → 세션 생성 후 `/chat/:roomId/video`에서 WebRTC + 시그널링(STOMP `/app/video.signal`, `/topic/video.session.{sessionId}`).
+
+모든 API·WebSocket은 **JWT(access token)** 가 필요합니다. 로그인 연동 후 `api/auth.ts`의 `setToken(accessToken)`, `setUser({ userId, role })`를 호출해 두면 됩니다. (개발 시 토큰은 localStorage `daon_access_token`에 넣어 테스트할 수 있습니다.)
