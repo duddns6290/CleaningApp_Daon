@@ -3,7 +3,9 @@
     <!-- Header -->
     <TheHeader>
       <template #right>
-        <button class="btn btn--outline" @click="onLogin">로그인</button>
+        <button class="btn btn--outline" @click="goChat">채팅</button>
+        <button v-if="isLoggedIn" class="btn btn--outline" @click="onLogout">로그아웃</button>
+        <button v-else class="btn btn--outline" @click="onLogin">로그인</button>
       </template>
     </TheHeader>
 
@@ -46,13 +48,21 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
+import { isAuthenticated, clearToken } from '@/api/auth'
+import { useSocketStore } from '@/stores/socket'
 import '../assets/HomePage.css'
 import TheHeader from '@/components/layout/TheHeader.vue'
 import TheFooter from '@/components/layout/TheFooter.vue'
 
 const router = useRouter()
+const socketStore = useSocketStore()
+
+const isLoggedIn = ref(isAuthenticated())
+onMounted(() => {
+  isLoggedIn.value = isAuthenticated()
+})
 
 const currentLocation = ref('옥길동')
 const showLocationMenu = ref(false)
@@ -91,4 +101,11 @@ function openCategory (key: string) {
   alert(`[카테고리] ${key}`)
 }
 function onLogin () { router.push('/login') }
+function onLogout () {
+  clearToken()
+  socketStore.disconnect()
+  isLoggedIn.value = false
+  router.replace('/')
+}
+function goChat () { router.push('/chat') }
 </script>
