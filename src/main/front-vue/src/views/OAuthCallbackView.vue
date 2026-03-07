@@ -1,56 +1,68 @@
+<!-- src/views/OAuthCallbackView.vue -->
 <template>
-  <div class="oauth-callback" v-if="errorMessage">
-    <p class="oauth-callback__error">{{ errorMessage }}</p>
+  <div class="callback-page">
+    <p>소셜 로그인 처리 중입니다...</p>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
-import { useRouter } from 'vue-router'
+import { onMounted } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
 import { setToken, setUser } from '@/api/auth'
 import { decodeJwtPayload } from '@/utils/jwt'
 
+const route = useRoute()
 const router = useRouter()
-const errorMessage = ref('')
 
 onMounted(() => {
   const hash = window.location.hash
-  if (!hash) {
-    errorMessage.value = '토큰이 없습니다.'
+  const accessTokenMatch = hash?.match(/#accessToken=([^&]+)/)
+  if (accessTokenMatch?.[1]) {
+    const accessToken = accessTokenMatch[1]
+    setToken(accessToken)
+    const payload = decodeJwtPayload(accessToken)
+    if (payload?.sub) {
+      setUser({ userId: payload.sub, role: payload.role ?? 'CUSTOMER' })
+    }
+    router.replace('/')
     return
   }
 
-  const params = new URLSearchParams(hash.slice(1))
-  const accessToken = params.get('accessToken')
-  if (!accessToken) {
-    errorMessage.value = 'accessToken을 찾을 수 없습니다.'
+  const code = route.query.code as string | undefined
+  const provider = route.query.provider as string | undefined
+
+  if (!code || !provider) {
+    alert('잘못된 접근입니다.')
+    router.push({ name: 'LoginPage' })
     return
   }
 
-  setToken(accessToken)
-  const payload = decodeJwtPayload(accessToken)
-  if (payload?.sub) {
-    setUser({
-      userId: payload.sub,
-      role: payload.role || 'CUSTOMER',
-    })
-  }
+  try {
+    const isNewUser = true
+    const email = 'you@example.com'
 
-  router.replace('/chat')
+    if (isNewUser) {
+      router.push({
+        name: 'SignUp',
+        query: { type: 'oauth', email, provider },
+      })
+    } else {
+      router.replace('/')
+    }
+  } catch (error) {
+    console.error(error)
+    alert('소셜 로그인 처리 중 오류가 발생했습니다.')
+    router.push({ name: 'LoginPage' })
+  }
 })
 </script>
 
 <style scoped>
-.oauth-callback {
+.callback-page {
+  min-height: 100vh;
   display: flex;
-  align-items: center;
   justify-content: center;
-  min-height: 40vh;
-  padding: 2rem;
-  text-align: center;
-}
-
-.oauth-callback__error {
-  color: #c00;
+  align-items: center;
+  font-size: 16px;
 }
 </style>
