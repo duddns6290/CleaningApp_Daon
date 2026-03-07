@@ -8,11 +8,26 @@
 <script setup lang="ts">
 import { onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
+import { setToken, setUser } from '@/api/auth'
+import { decodeJwtPayload } from '@/utils/jwt'
 
 const route = useRoute()
 const router = useRouter()
 
-onMounted(async () => {
+onMounted(() => {
+  const hash = window.location.hash
+  const accessTokenMatch = hash?.match(/#accessToken=([^&]+)/)
+  if (accessTokenMatch?.[1]) {
+    const accessToken = accessTokenMatch[1]
+    setToken(accessToken)
+    const payload = decodeJwtPayload(accessToken)
+    if (payload?.sub) {
+      setUser({ userId: payload.sub, role: payload.role ?? 'CUSTOMER' })
+    }
+    router.replace('/')
+    return
+  }
+
   const code = route.query.code as string | undefined
   const provider = route.query.provider as string | undefined
 
@@ -23,33 +38,16 @@ onMounted(async () => {
   }
 
   try {
-    // 1) 백엔드에 code + provider 보내서 토큰 + 유저정보 받아오기
-    /*
-    const res = await api.get('/api/auth/oauth/callback', {
-      params: { code, provider },
-    })
-
-    const { isNewUser, email, accessToken } = res.data
-    saveToken(accessToken)
-    */
-
-    // 예시용 MOCK
     const isNewUser = true
     const email = 'you@example.com'
 
     if (isNewUser) {
-      // 추가정보 입력 페이지로 이동
       router.push({
         name: 'SignUp',
-        query: {
-          type: 'oauth',
-          email,
-          provider,
-        },
+        query: { type: 'oauth', email, provider },
       })
     } else {
-      // 기존 회원이면 홈으로
-      router.push({ name: 'home' })
+      router.replace('/')
     }
   } catch (error) {
     console.error(error)

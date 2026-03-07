@@ -6,7 +6,6 @@ import OauthCallbackView from '@/views/OauthCallbackView.vue'
 import ChatListView from '../views/ChatListView.vue'
 import ChatRoomView from '../views/ChatRoomView.vue'
 import VideoCallView from '../views/VideoCallView.vue'
-import OAuthCallbackView from '../views/OAuthCallbackView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -36,9 +35,11 @@ const router = createRouter({
       path: '/oauth/callback',
       name: 'OauthCallback',
       component: OauthCallbackView,
+    },
+    {
       path: '/oauth-callback',
-      name: 'oauth-callback',
-      component: OAuthCallbackView,
+      name: 'OauthCallbackHash',
+      component: OauthCallbackView,
     },
     {
       path: '/chat',
