@@ -1,4 +1,4 @@
-<!-- src/views/OauthCallbackView.vue -->
+<!-- src/views/OAuthCallbackView.vue -->
 <template>
   <div class="callback-page">
     <p>소셜 로그인 처리 중입니다...</p>
