@@ -39,5 +39,5 @@ out/
 ### env파일 ###
 .env
 
-### 테스트 파일 ###
-/src/main/resources/static/
+###resources폴더 내 테스트 파일 ###
+src/main/resources/static/

@@ -115,6 +115,8 @@ import { ref } from 'vue'
 import TheHeader from '@/components/layout/TheHeader.vue'
 import TheFooter from '@/components/layout/TheFooter.vue'
 import '../assets/LoginPage.css'
+import { useRouter } from 'vue-router'
+const router = useRouter()
 
 type Mode = 'email' | 'phone'
 const mode = ref<Mode>('email')
@@ -163,11 +165,17 @@ async function onSubmit () {
   }
 }
 
+//소셜 로그인 링크 이동 함수
 function social (provider: 'kakao' | 'naver' | 'google') {
-  alert(`[데모] ${provider} 로그인 시작`)
+  window.location.href = `/oauth2/authorization/${provider}`
 }
 
 function onForgot () { alert('[데모] 비밀번호 찾기') }
-function goSignup () { alert('[데모] 회원가입 이동') }
+function goSignup () {
+  router.push({
+    name: 'SignUp',
+    query: { type: 'normal' }   // 일반 회원가입
+  })
+}
 function goHome () { history.back() }
 </script>

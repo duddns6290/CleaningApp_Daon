@@ -1,8 +1,12 @@
 package com.org.cleaningapp_daon.chat.controller;
 
 import com.org.cleaningapp_daon.chat.dto.ChatMessageResponse;
-import com.org.cleaningapp_daon.chat.entity.ChatRoom;
+import com.org.cleaningapp_daon.chat.dto.ChatRoomDetailResponse;
+import com.org.cleaningapp_daon.chat.dto.ChatRoomListItemResponse;
+import com.org.cleaningapp_daon.chat.dto.ChatRoomResponse;
+import com.org.cleaningapp_daon.chat.dto.CreateChatRoomRequest;
 import com.org.cleaningapp_daon.chat.service.ChatService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,9 +19,19 @@ public class ChatRestController {
 
     private final ChatService chatService;
 
+    @PostMapping("/rooms")
+    public ChatRoomResponse createRoom(@Valid @RequestBody CreateChatRoomRequest request) {
+        return chatService.createRoom(request);
+    }
+
     @GetMapping("/rooms")
-    public List<ChatRoom> myRooms() {
-        return chatService.myRooms();
+    public List<ChatRoomListItemResponse> myRooms() {
+        return chatService.myRoomListItems();
+    }
+
+    @GetMapping("/rooms/{roomId}")
+    public ChatRoomDetailResponse getRoomDetail(@PathVariable Long roomId) {
+        return chatService.getRoomDetail(roomId);
     }
 
     @GetMapping("/rooms/{roomId}/messages")
