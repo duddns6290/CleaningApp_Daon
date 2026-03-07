@@ -167,7 +167,7 @@ async function onSubmit () {
 
 //소셜 로그인 링크 이동 함수
 function social (provider: 'kakao' | 'naver' | 'google') {
-  window.location.href = `http://localhost:8080/oauth2/authorization/${provider}`;
+  window.location.href = `/oauth2/authorization/${provider}`
 }
 
 function onForgot () { alert('[데모] 비밀번호 찾기') }

@@ -1,6 +1,12 @@
 package com.org.cleaningapp_daon.user.controller;
 
+import com.org.cleaningapp_daon.user.entity.dto.SignupRequest;
+import com.org.cleaningapp_daon.user.entity.dto.SignupResponse;
+import com.org.cleaningapp_daon.user.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.core.user.OAuth2User;
@@ -10,7 +16,20 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api/user")
+@RequiredArgsConstructor
 public class UserController {
+
+    private final UserService userService;
+
+    @PostMapping("/signup")
+    @Operation(
+            summary = "일반 회원가입",
+            description = "이메일, 비밀번호를 이용한 일반 회원가입"
+    )
+    public ResponseEntity<SignupResponse> signup(@Valid @RequestBody SignupRequest request) {
+        SignupResponse response = userService.signup(request);
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+    }
 
     @GetMapping("/me")
     @Operation(
