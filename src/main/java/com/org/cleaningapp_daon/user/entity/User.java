@@ -2,6 +2,7 @@ package com.org.cleaningapp_daon.user.entity;
 
 import com.org.cleaningapp_daon.user.entity.dto.OauthProvider;
 import com.org.cleaningapp_daon.user.entity.dto.SignupType;
+import com.org.cleaningapp_daon.user.entity.dto.UserRole;
 import jakarta.persistence.*;
 import lombok.*;
 import java.time.LocalDateTime;
@@ -23,7 +24,11 @@ public class User {
     private String name;
     private String address;
     private String phone;
-    private String password;
+    private String password;    // 일반 회원가입 비밀번호
+
+    @Column(name = "role")
+    @Enumerated(EnumType.STRING)
+    private UserRole role;
 
     @Column(name = "oauth_provider")
     @Enumerated(EnumType.STRING)

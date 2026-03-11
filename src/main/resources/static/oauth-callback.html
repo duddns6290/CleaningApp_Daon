@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>로그인 완료</title>
+  <style>
+    body { font-family: sans-serif; text-align: center; padding: 2rem; }
+    .ok { color: #0a0; }
+  </style>
+</head>
+<body>
+  <h1 class="ok">로그인되었습니다.</h1>
+  <p>이 창을 닫거나 메인 페이지로 이동해 주세요.</p>
+  <script>
+    (function () {
+      var hash = window.location.hash || '';
+      if (hash.indexOf('accessToken=') === 1) {
+        try {
+          var token = hash.slice(1).split('&').find(function (p) { return p.startsWith('accessToken='); });
+          if (token) {
+            var accessToken = token.split('=')[1];
+            if (window.opener) {
+              window.opener.postMessage({ type: 'OAUTH_ACCESS_TOKEN', accessToken: accessToken }, '*');
+              window.close();
+            }
+          }
+        } catch (e) {}
+      }
+    })();
+  </script>
+</body>
+</html>

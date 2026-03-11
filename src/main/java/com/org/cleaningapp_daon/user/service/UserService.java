@@ -4,6 +4,7 @@ import com.org.cleaningapp_daon.user.entity.User;
 import com.org.cleaningapp_daon.user.entity.dto.SignupRequest;
 import com.org.cleaningapp_daon.user.entity.dto.SignupResponse;
 import com.org.cleaningapp_daon.user.entity.dto.SignupType;
+import com.org.cleaningapp_daon.user.entity.dto.UserRole;
 import com.org.cleaningapp_daon.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -45,6 +46,7 @@ public class UserService {
                 .password(encodedPassword)
                 .phone(request.getPhone())
                 .address(request.getAddress())
+                .role(UserRole.CUSTOMER) // 당분간 기본 CUSTOMER
                 .signupType(SignupType.NORMAL)
                 .oauthProvider(null) // 일반 회원가입은 OAuth Provider 없음
                 .createdAt(LocalDateTime.now())
